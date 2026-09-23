@@ -31,19 +31,30 @@ st.set_page_config(
 st.markdown(
     dedent("""
     <style>
+        /* =========================================================
+           THEME-AWARE DASHBOARD STYLING
+           Uses Streamlit theme variables so both light and dark
+           modes remain readable without changing the layout.
+           ========================================================= */
+
         [data-testid="stAppViewContainer"] {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            background: var(--background-color, #f5f7fa) !important;
+            color: var(--text-color, #1f2937) !important;
         }
 
         [data-testid="stHeader"] {
-            background: rgba(0, 0, 0, 0);
+            background: rgba(0, 0, 0, 0) !important;
         }
+
+        /* ---------------------------------------------------------
+           HERO
+           --------------------------------------------------------- */
 
         .hero {
             background: linear-gradient(120deg, #1e3c72 0%, #2a5298 100%);
             padding: 2.4rem 2rem;
             border-radius: 16px;
-            color: white;
+            color: #ffffff !important;
             margin-bottom: 1.6rem;
             box-shadow: 0 10px 30px rgba(30, 60, 114, 0.25);
         }
@@ -52,17 +63,57 @@ st.markdown(
             font-size: 2.5rem;
             font-weight: 750;
             margin: 0 0 0.45rem 0;
-            color: white;
+            color: #ffffff !important;
         }
 
         .hero p {
             font-size: 1.05rem;
             opacity: 0.95;
             margin: 0;
+            color: #f8fafc !important;
         }
 
+        /* ---------------------------------------------------------
+           GLOBAL CONTENT
+           --------------------------------------------------------- */
+
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] p,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] li,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] strong,
+        [data-testid="stAppViewContainer"] [data-testid="stCaptionContainer"] {
+            color: var(--text-color, #1f2937) !important;
+        }
+
+        /* Bright blue headings work on both light and dark themes. */
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h2,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h3,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h4,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h5,
+        [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h6 {
+            color: #60a5fa !important;
+        }
+
+        /* ---------------------------------------------------------
+           CUSTOM SECTION TITLES
+           --------------------------------------------------------- */
+
+        .section-title {
+            font-size: 1.45rem;
+            font-weight: 750;
+            color: #60a5fa !important;
+            border-bottom: 3px solid #60a5fa !important;
+            padding-bottom: 0.4rem;
+            margin: 1.5rem 0 1rem 0;
+            display: inline-block;
+        }
+
+        /* ---------------------------------------------------------
+           METRIC CARDS
+           --------------------------------------------------------- */
+
         .metric-card {
-            background: white;
+            background: var(--secondary-background-color, #ffffff);
             padding: 1.3rem 1.45rem;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -70,9 +121,13 @@ st.markdown(
             height: 100%;
         }
 
+        .metric-card * {
+            color: var(--text-color, #1f2937);
+        }
+
         .metric-label {
             font-size: 0.78rem;
-            color: #6b7280;
+            color: var(--text-color, #6b7280) !important;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.6px;
@@ -82,28 +137,50 @@ st.markdown(
         .metric-value {
             font-size: 1.85rem;
             font-weight: 750;
-            color: #1e3c72;
+            color: #60a5fa !important;
             line-height: 1.15;
         }
 
-        .section-title {
-            font-size: 1.45rem;
-            font-weight: 750;
-            color: #1e3c72;
-            border-bottom: 3px solid #2a5298;
-            padding-bottom: 0.4rem;
-            margin: 1.5rem 0 1rem 0;
-            display: inline-block;
+        /* ---------------------------------------------------------
+           INFO CARDS
+           --------------------------------------------------------- */
+
+        .info-card {
+            background: var(--secondary-background-color, #ffffff);
+            padding: 1.25rem 1.4rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            margin-bottom: 1rem;
         }
+
+        .info-title {
+            color: #60a5fa !important;
+            font-weight: 750;
+            font-size: 1rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .info-body {
+            color: var(--text-color, #374151) !important;
+            line-height: 1.55;
+        }
+
+        /* ---------------------------------------------------------
+           PREDICTION
+           --------------------------------------------------------- */
 
         .prediction-box {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 2rem;
             border-radius: 14px;
-            color: white;
+            color: #ffffff !important;
             text-align: center;
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.35);
             margin: 1.2rem 0;
+        }
+
+        .prediction-box * {
+            color: #ffffff !important;
         }
 
         .prediction-label {
@@ -124,25 +201,9 @@ st.markdown(
             opacity: 0.9;
         }
 
-        .info-card {
-            background: white;
-            padding: 1.25rem 1.4rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-            margin-bottom: 1rem;
-        }
-
-        .info-title {
-            color: #1e3c72;
-            font-weight: 750;
-            font-size: 1rem;
-            margin-bottom: 0.35rem;
-        }
-
-        .info-body {
-            color: #374151;
-            line-height: 1.55;
-        }
+        /* ---------------------------------------------------------
+           BUTTON
+           --------------------------------------------------------- */
 
         .stButton > button {
             width: 100%;
@@ -150,12 +211,82 @@ st.markdown(
             font-weight: 700;
         }
 
+        /* ---------------------------------------------------------
+           INPUTS / LABELS
+           --------------------------------------------------------- */
+
+        [data-testid="stAppViewContainer"] label {
+            color: var(--text-color, #374151) !important;
+        }
+
+        [data-testid="stAppViewContainer"] input,
+        [data-testid="stAppViewContainer"] textarea,
+        [data-testid="stAppViewContainer"] [data-baseweb="select"] * {
+            color: var(--text-color, #1f2937) !important;
+        }
+
+        [data-testid="stAppViewContainer"] input,
+        [data-testid="stAppViewContainer"] textarea,
+        [data-testid="stAppViewContainer"] [data-baseweb="select"] > div {
+            background: var(--secondary-background-color, #ffffff) !important;
+            border-color: #64748b !important;
+        }
+
+        /* ---------------------------------------------------------
+           NATIVE METRICS
+           --------------------------------------------------------- */
+
+        [data-testid="stMetric"] {
+            background: var(--secondary-background-color, #ffffff) !important;
+            color: var(--text-color, #1f2937) !important;
+            border-radius: 12px;
+        }
+
+        [data-testid="stMetricLabel"],
+        [data-testid="stMetricLabel"] p {
+            color: var(--text-color, #6b7280) !important;
+        }
+
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricValue"] div {
+            color: #60a5fa !important;
+        }
+
+        /* ---------------------------------------------------------
+           ALERTS / INFO BOXES
+           --------------------------------------------------------- */
+
+        [data-testid="stAlert"] {
+            color: var(--text-color, #374151) !important;
+        }
+
+        [data-testid="stAlert"] p,
+        [data-testid="stAlert"] div {
+            color: var(--text-color, #374151) !important;
+        }
+
+        /* ---------------------------------------------------------
+           TABLES
+           --------------------------------------------------------- */
+
+        [data-testid="stAppViewContainer"] table,
+        [data-testid="stAppViewContainer"] th,
+        [data-testid="stAppViewContainer"] td {
+            color: var(--text-color, #1f2937) !important;
+        }
+
+        /* ---------------------------------------------------------
+           SIDEBAR — keep existing blue/white design unchanged
+           --------------------------------------------------------- */
+
         [data-testid="stSidebar"] {
             background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
         }
 
-        [data-testid="stSidebar"] * {
-            color: white !important;
+        [data-testid="stSidebar"] *,
+        [data-testid="stSidebar"] .stMarkdown,
+        [data-testid="stSidebar"] label {
+            color: #ffffff !important;
         }
     </style>
     """),
