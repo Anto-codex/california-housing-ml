@@ -9,3 +9,4 @@ seaborn
 scipy
 statsmodels
 shap
+ploty
